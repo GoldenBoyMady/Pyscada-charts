@@ -45,7 +45,7 @@ class ChartD3Form(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ChartD3Form, self).__init__(*args, **kwargs)
         wtf = Variable.objects.all()
-        w = self.fields['linkType'].widget
+        w = self.fields['variables'].widget
         choices = []
         for choice in wtf:
             choices.append((choice.id, choice.name + '( ' + choice.unit.description + ' )'))
@@ -54,7 +54,7 @@ class ChartD3Form(forms.ModelForm):
 
 class ChartD3Inline(admin.TabularInline):
     model = D3Category
-    filter_vertical = ['linkType']
+    filter_vertical = ['variables']
 
     def get_extra(self, request, obj=None, **kwargs):
         return 0 if obj else 1
