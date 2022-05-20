@@ -1,0 +1,32 @@
+<div id="chart-legend-{{widget_pk}}-{{chart.pk}}" style="padding: 0px; position: relative; table-layout: fixed;">
+    <div class="legendTitle">{{ chart.title }}</div>
+    <div class="legend">
+        <table id="chart-legend-table-{{widget_pk}}-{{chart.pk}}" class="tablesorter" style="font-size:smaller;color:#545454; width: 100%;table-layout: fixed;">
+            <thead>
+                <tr>
+                    <th style="width:14px;">&nbsp;</th>
+                    <th style="width:14px;" class="sorter-false">&nbsp;</th>
+                    <th  class="{sorter: 'text'}">&nbsp;</th>
+                    <th style="width:45px; text-align:right" class="{sorter: 'digit'}">&nbsp;</th>
+                    <th style="width:35px;" class="{sorter: 'text'}">&nbsp;</th>
+                </tr>
+                <tr class="legendSeries">
+                    <td>
+                        <input type="checkbox" checked="checked" id="chart-legend-checkbox-{{widget_pk}}-{{ chart.pk }}-make_all_none">
+                    </td>
+                    <td></td>
+                    <td>Mark All/None</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+
+            {% if not chart_legend_html %}
+                chart_legend_html = "_chart_legend.html"
+            {% endif %}
+            {% include chart_legend_html with axe=chart%}
+            </tbody>
+        </table>
+    </div>
+</div>
