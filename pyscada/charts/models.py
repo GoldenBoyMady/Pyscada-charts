@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 import logging
 from pyscada.hmi.models import WidgetContentModel, WidgetContent
-from pyscada.models import Variable, Category
+from pyscada.models import Variable
 from django.db import models
 from django.template.loader import get_template
 from six import text_type
@@ -132,6 +132,6 @@ class D3Category(models.Model):
     links = models.PositiveSmallIntegerField(default=2, help_text="Linked variables or categories",
                                                        choices=link_type_choices)
     variables = models.ManyToManyField(Variable)
-    categories = models.ManyToManyField(Category)
+    #categories = models.ManyToManyField(Category)
 
     chart = models.ForeignKey(D3Chart, on_delete=models.CASCADE)
