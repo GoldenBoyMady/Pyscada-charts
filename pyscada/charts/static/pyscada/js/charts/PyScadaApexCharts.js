@@ -88,40 +88,55 @@
      * @type {Array<object>}
      */
      var options = {
-          series: [{
-          data: []
-        }],
-          chart: {
-          height: 350,
-          type: 'bar',
-          events: {
-            click: function(chart, w, e) {
-              // console.log(chart, w, e)
-            }
-          }
-        },
-        colors: [],
-        plotOptions: {
-          bar: {
-            columnWidth: '45%',
-            distributed: true,
-          }
-        },
-        dataLabels: {
-          enabled: false
-        },
-        legend: {
-          show: false
-        },
-        xaxis: {
-          categories: [],
-          labels: {
-            style: {
-              colors: [],
-              fontSize: '12px'
-            }
-          }
+      series: [{
+      data: []
+    }],
+      chart: {
+      type: 'bar',
+      height: 350
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: '55%',
+        endingShape: 'rounded'
+      },
+    },
+    dataLabels: {
+      enabled: false
+    },
+    stroke: {
+      show: true,
+      width: 2,
+      colors: ['transparent']
+    },
+    xaxis: {
+      categories: [],
+      type: 'datetime',
+    },
+    // yaxis: {
+    //   title: {
+    //     text: '$ (thousands)'
+    //   }
+    // },
+    fill: {
+      opacity: 1
+    },
+    tooltip: {
+      shared: false,
+      x: {
+        formatter: function (val) {
+          return new Date(val).toString()
         }
+      },
+    },
+    // tooltip: {
+    //   y: {
+    //     formatter: function (val) {
+    //       return "$ " + val + " thousands"
+    //     }
+    //   }
+    // }
     };
 
     /**
@@ -278,32 +293,46 @@
 
                 if (typeof apexPlot !== 'undefined' && apexPlot !== null) {
                     // update flot plot
-                    var dataBar = [];
-                    var categorieNames = [];
+                    var dataBar;
+                    var dataName;
+                    var datas = [];
+
                     var variablesColors = [];
+
                     for (var i = 0; i<series.length; i++){
-                        const obj = {};
-                        obj.x = series[i].label;
-                        obj.y = {'x': series[i].label, 'y': series[i].data[1]};
-                        obj.z = series[i].color;
-                        categorieNames.push(obj.x);
-                        dataBar.push(obj.y);
-                        variablesColors.push(obj.z);
+
+                        dataName = series[i].label;
+                        dataBar = series[i].data;
+                        // dataLine = [{
+                        //   x: "02-02-2002",
+                        //   y: 44
+                        // }, {
+                        //   x: "12-02-2002",
+                        //   y: 51
+                        // }]
+                        datas.push({name:dataName,data:dataBar});
+
+                        // apexPlot.appendSeries({
+                        //     name: dataName,
+                        //     data : dataLine
+                        // });
+
+                        variablesColors.push(series[i].color);
                     }
                     apexPlot.updateOptions({
-                        series: [{
-                         data: dataBar
-                        }],
-                        colors : variablesColors,
+                        series: datas,
+                        colors: variablesColors,
                         xaxis: {
-                          categories: categorieNames,
-                          labels:{
-                            style: {
-                              colors : variablesColors
+                          labels: {
+                            datetimeFormatter: {
+                              year: 'yyyy',
+                              month: 'MMM \'yy',
+                              day: 'dd MMM',
+                              hour: 'HH:mm'
                             }
                           }
                         }
-                      });
+                    });
                 }
             }
         }
@@ -352,7 +381,19 @@
         size: 3,
         sizeOffset: 3
       }
-     }
+     },
+     tooltip: {
+      shared: false,
+      x: {
+        formatter: function (val) {
+          return new Date(val).toString()
+        }
+      }
+    },
+      xaxis: {
+        categories: [],
+        type: 'datetime',
+      }
      };
    
    /**
@@ -619,7 +660,17 @@
                     }
                     apexPlot.updateOptions({
                         series: datas,
-                        colors: variablesColors
+                        colors: variablesColors,
+                        xaxis: {
+                          labels: {
+                            datetimeFormatter: {
+                              year: 'yyyy',
+                              month: 'MMM \'yy',
+                              day: 'dd MMM',
+                              hour: 'HH:mm'
+                            }
+                          }
+                        }
                       });
                }
            }
