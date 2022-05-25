@@ -131,7 +131,7 @@ class D3Category(models.Model):
         )
     links = models.PositiveSmallIntegerField(default=2, help_text="Linked variables or categories",
                                                        choices=link_type_choices)
-    variables = models.ManyToManyField(Variable)
+    linkType = models.ManyToManyField(Variable)
     #categories = models.ManyToManyField(Category)
 
     chart = models.ForeignKey(D3Chart, on_delete=models.CASCADE)

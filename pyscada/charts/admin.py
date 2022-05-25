@@ -54,7 +54,7 @@ class ChartD3Form(forms.ModelForm):
 
 class ChartD3Inline(admin.TabularInline):
     model = D3Category
-    filter_vertical = ['variables']
+    filter_vertical = ['linkType']
 
     def get_extra(self, request, obj=None, **kwargs):
         return 0 if obj else 1

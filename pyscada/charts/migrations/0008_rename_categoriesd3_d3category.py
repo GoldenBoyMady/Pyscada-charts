@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pyscada', '0099_category_name'),
+        ('pyscada', '0097_auto_20220118_1046'),
         ('charts', '0007_rename_chartd3_d3chart'),
     ]
 

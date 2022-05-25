@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pyscada', '0098_category'),
+        ('pyscada', '0097_auto_20220118_1046'),
         ('charts', '0004_auto_20220516_1322'),
     ]
 
