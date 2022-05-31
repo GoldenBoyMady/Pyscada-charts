@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 from itertools import count
 import logging
 from pickle import TRUE
-from tkinter import Entry
 from pyscada.hmi.models import WidgetContentModel, WidgetContent
 from pyscada.models import Variable
 from django.db import models
