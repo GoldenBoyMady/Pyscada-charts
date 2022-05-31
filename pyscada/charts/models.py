@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from itertools import count
 import logging
+from pickle import TRUE
+from tkinter import Entry
 from pyscada.hmi.models import WidgetContentModel, WidgetContent
 from pyscada.models import Variable
 from django.db import models
@@ -85,11 +88,45 @@ class ApexChart(WidgetContentModel):
         STATIC_URL + 'pyscada/js/jquery/jquery.tablesorter.min.js',
         STATIC_URL + 'pyscada/js/charts/PyScadaApexCharts.js',
         ]
+        opts["object_config_list"] = set()
+        opts["object_config_list"].update(self._get_objects_for_html())
         return main_content, sidebar_content, opts
+class D3Category(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=400, default='')
+
+    variables = models.ManyToManyField(Variable,blank=True)
+    categories = models.ManyToManyField('self',blank=True,symmetrical=False)
+
+    def nom(self):
+        return self.name
+
+    def getVariables(self):
+        return D3Category.objects.all()[:1].get().nom()
+
+#class CategoryLink(models.Model):
+    #categories = models.ForeignKey(D3Category, null=True, blank=True, on_delete=models.CASCADE)
+    #link_type_choices = (
+        #(0, 'Variable'),
+        #(1, 'Category'),
+        #)
+    #links = models.PositiveSmallIntegerField(default=2, help_text="Linked variables or categories",
+    #                                                   choices=link_type_choices)
+    #variables = models.ManyToManyField(Variable)
+    #categories = models.ManyToManyField(D3Category)
 
 class D3Chart(WidgetContentModel):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=400, default='')
+    base_categories = models.ManyToManyField(D3Category)
+
+    def arborescence():
+        chaine=[]
+        for i in range (0,D3Category.objects.all().count()):
+            chaine.append(D3Category.objects.all()[i].nom())
+        return chaine
+
+    categories = arborescence()
 
     def __str__(self):
         return text_type(str(self.id) + ': ' + self.title)
@@ -114,24 +151,3 @@ class D3Chart(WidgetContentModel):
         ]
         return main_content, sidebar_content, opts
 
-    def _get_objects_for_html(self, list_to_append=None, obj=None, exclude_model_names=None):
-        list_to_append = super()._get_objects_for_html(list_to_append, obj, exclude_model_names)
-        if obj is None:
-            for axis in self.chartaxis_set.all():
-                list_to_append = super()._get_objects_for_html(list_to_append, axis, ['chart'])
-
-        return list_to_append
-
-
-class D3Category(models.Model):
-    label = models.CharField(max_length=400, default='', blank=True)
-    link_type_choices = (
-        (0, 'Variable'),
-        (1, 'Category'),
-        )
-    links = models.PositiveSmallIntegerField(default=2, help_text="Linked variables or categories",
-                                                       choices=link_type_choices)
-    linkType = models.ManyToManyField(Variable)
-    #categories = models.ManyToManyField(Category)
-
-    chart = models.ForeignKey(D3Chart, on_delete=models.CASCADE)

@@ -92,6 +92,17 @@
       data: []
     }],
       chart: {
+        events:{
+          zoomed: function(chartContext, { xaxis, yaxis }) {
+            DATA_DISPLAY_TO_TIMESTAMP = ((DATA_TO_TIMESTAMP == xaxis.max) ? DATA_DISPLAY_TO_TIMESTAMP : xaxis.max);
+            DATA_DISPLAY_FROM_TIMESTAMP = ((DATA_FROM_TIMESTAMP == xaxis.min) ? DATA_DISPLAY_FROM_TIMESTAMP : xaxis.min);
+            if (DATA_DISPLAY_TO_TIMESTAMP < 0 && DATA_DISPLAY_FROM_TIMESTAMP < 0) {DATA_DISPLAY_WINDOW = DATA_TO_TIMESTAMP - DATA_FROM_TIMESTAMP;}
+            else if (DATA_DISPLAY_TO_TIMESTAMP < 0) {DATA_DISPLAY_WINDOW = DATA_TO_TIMESTAMP - DATA_DISPLAY_FROM_TIMESTAMP;}
+            else if (DATA_DISPLAY_FROM_TIMESTAMP < 0) {DATA_DISPLAY_WINDOW = DATA_DISPLAY_TO_TIMESTAMP - DATA_FROM_TIMESTAMP;}
+            else {DATA_DISPLAY_WINDOW = DATA_DISPLAY_TO_TIMESTAMP-DATA_DISPLAY_FROM_TIMESTAMP;}
+            set_x_axes();
+          }
+        },
       type: 'bar',
       height: 350
     },
@@ -114,11 +125,9 @@
       categories: [],
       type: 'datetime',
     },
-    // yaxis: {
-    //   title: {
-    //     text: '$ (thousands)'
-    //   }
-    // },
+    yaxis: {
+      decimalsInFloat:2
+    },
     fill: {
       opacity: 1
     },
@@ -126,7 +135,8 @@
       shared: false,
       x: {
         formatter: function (val) {
-          return new Date(val).toString()
+          var date = new Date(val);
+          return date.getDate().toString()+'/'+date.getMonth()+'/'+date.getFullYear()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
         }
       },
     },
@@ -361,10 +371,21 @@
       data: [null,null]
     }],
       chart: {
+        events:{
+          zoomed: function(chartContext, { xaxis, yaxis }) {
+            DATA_DISPLAY_TO_TIMESTAMP = ((DATA_TO_TIMESTAMP == xaxis.max) ? DATA_DISPLAY_TO_TIMESTAMP : xaxis.max);
+            DATA_DISPLAY_FROM_TIMESTAMP = ((DATA_FROM_TIMESTAMP == xaxis.min) ? DATA_DISPLAY_FROM_TIMESTAMP : xaxis.min);
+            if (DATA_DISPLAY_TO_TIMESTAMP < 0 && DATA_DISPLAY_FROM_TIMESTAMP < 0) {DATA_DISPLAY_WINDOW = DATA_TO_TIMESTAMP - DATA_FROM_TIMESTAMP;}
+            else if (DATA_DISPLAY_TO_TIMESTAMP < 0) {DATA_DISPLAY_WINDOW = DATA_TO_TIMESTAMP - DATA_DISPLAY_FROM_TIMESTAMP;}
+            else if (DATA_DISPLAY_FROM_TIMESTAMP < 0) {DATA_DISPLAY_WINDOW = DATA_DISPLAY_TO_TIMESTAMP - DATA_FROM_TIMESTAMP;}
+            else {DATA_DISPLAY_WINDOW = DATA_DISPLAY_TO_TIMESTAMP-DATA_DISPLAY_FROM_TIMESTAMP;}
+            set_x_axes();
+          }
+        },
       height: 350,
       type: 'line',
       zoom: {
-        enabled: false
+        enabled: true
       },
       animations: {
         enabled: false
@@ -386,14 +407,19 @@
       shared: false,
       x: {
         formatter: function (val) {
-          return new Date(val).toString()
+          var date = new Date(val);
+          return date.getDate().toString()+'/'+date.getMonth()+'/'+date.getFullYear()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
         }
       }
     },
       xaxis: {
+        tooltip:false,
         categories: [],
         type: 'datetime',
-      }
+      },
+      yaxis: {
+        decimalsInFloat:2
+      },
      };
    
    /**

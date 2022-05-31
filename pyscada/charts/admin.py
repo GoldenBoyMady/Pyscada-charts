@@ -27,6 +27,7 @@ class ChartApexAdmin(admin.ModelAdmin):
     search_fields = ['title', ]
     List_display_link = ('title',)
     list_display = ('id', 'title','x_axis_label', 'y_axis_label',)
+    filter_horizontal =  ('variables',)
     #list_filter = ('widget__page__title', 'widget__title',)
     form = ChartApexForm
     save_as = True
@@ -44,20 +45,31 @@ class ChartApexAdmin(admin.ModelAdmin):
 class ChartD3Form(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ChartD3Form, self).__init__(*args, **kwargs)
-        wtf = Variable.objects.all()
-        w = self.fields['variables'].widget
-        choices = []
-        for choice in wtf:
-            choices.append((choice.id, choice.name + '( ' + choice.unit.description + ' )'))
-        w.choices = choices
+
+class D3CategoryForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(D3CategoryForm, self).__init__(*args, **kwargs)
 
 
-class ChartD3Inline(admin.TabularInline):
-    model = D3Category
-    filter_vertical = ['linkType']
+class D3CategoryAdmin(admin.ModelAdmin):
+    list_per_page = 100
+    # ordering = ['position',]
+    search_fields = ['title', ]
+    List_display_link = ('title',)
+    list_display = ('id', 'name',)
+    filter_horizontal =  ('categories','variables',)
+    #list_filter = ('widget__page__title', 'widget__title',)
+    form = D3CategoryForm
+    save_as = True
+    save_as_continue = True
 
-    def get_extra(self, request, obj=None, **kwargs):
-        return 0 if obj else 1
+    def name(self, instance):
+        return instance.variables.name
+    
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'catagory':
+            kwargs['empty_label'] = ""
+        return super(D3CategoryAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class ChartD3Admin(admin.ModelAdmin):
@@ -67,10 +79,12 @@ class ChartD3Admin(admin.ModelAdmin):
     List_display_link = ('title',)
     list_display = ('id', 'title',)
     #list_filter = ('widget__page__title', 'widget__title',)
-    #form = ChartForm
+    form = ChartD3Form
     save_as = True
     save_as_continue = True
-    inlines = [ChartD3Inline]
+    filter_horizontal =  ('base_categories',)
+    #inlines = [ChartD3Inline]
+    
 
     def name(self, instance):
         return instance.variables.name
@@ -89,7 +103,7 @@ class ChartLibrarieAdmin(admin.ModelAdmin):
     save_as = True
     save_as_continue = True
 
-
+admin_site.register(D3Category, D3CategoryAdmin)
 admin_site.register(D3Chart, ChartD3Admin)
 admin_site.register(ApexChart, ChartApexAdmin)
 admin_site.register(ChartLibrarie, ChartLibrarieAdmin)
