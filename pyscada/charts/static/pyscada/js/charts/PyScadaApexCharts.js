@@ -124,6 +124,9 @@
     xaxis: {
       categories: [],
       type: 'datetime',
+      labels:{
+        datetimeUTC: false
+      },
     },
     yaxis: {
       decimalsInFloat:2
@@ -269,7 +272,6 @@
 
             for (var key in keys){
               key = keys[key];
-              //console.log(apexPlot);
               if($(legend_checkbox_id+key).is(':checked') && typeof(DATA[key]) === 'object'){
                if (DATA_DISPLAY_TO_TIMESTAMP > 0 && DATA_DISPLAY_FROM_TIMESTAMP > 0){
                  start_id = find_index_sub_gte(DATA[key],DATA_DISPLAY_FROM_TIMESTAMP,0);
@@ -310,7 +312,6 @@
                     var variablesColors = [];
 
                     for (var i = 0; i<series.length; i++){
-
                         dataName = series[i].label;
                         dataBar = series[i].data;
                         // dataLine = [{
@@ -321,7 +322,6 @@
                         //   y: 51
                         // }]
                         datas.push({name:dataName,data:dataBar});
-
                         // apexPlot.appendSeries({
                         //     name: dataName,
                         //     data : dataLine
@@ -388,7 +388,7 @@
         enabled: true
       },
       animations: {
-        enabled: false
+        enabled: true
       }
     },
     stroke: {
@@ -416,6 +416,9 @@
         tooltip:false,
         categories: [],
         type: 'datetime',
+        labels:{
+          datetimeUTC: false
+        },
       },
       yaxis: {
         decimalsInFloat:2
