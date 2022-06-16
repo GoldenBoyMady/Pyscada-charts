@@ -34,7 +34,6 @@ class MixedChartApexAdmin(admin.ModelAdmin):
     search_fields = ['title', ]
     List_display_link = ('title',)
     list_display = ('id', 'title',)
-    filter_horizontal =  ('variables',)
     #list_filter = ('widget__page__title', 'widget__title',)
     form = ChartApexForm
     save_as = True

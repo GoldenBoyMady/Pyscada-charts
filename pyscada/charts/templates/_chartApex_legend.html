@@ -1,6 +1,6 @@
 {% for var in axe.variables.all %}
       {% if var.active and var.device.active %}
-      <tr class="legendSeries" title="{{var.description}}">
+      <tr class="legendSeries" title="{{var.description}}" hidden>
           <td>
               <span class="hidden" id="chart-legend-checkbox-status-{{widget_pk}}-{{chart.pk}}-{{var.pk}}" >1</span>
               <input type="checkbox" checked="checked" id="chart-legend-checkbox-{{widget_pk}}-{{ chart.pk }}-{{ var.pk }}">

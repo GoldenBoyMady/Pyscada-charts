@@ -29,8 +29,6 @@ class ApexMixedChart(WidgetContentModel):
     id = models.AutoField(primary_key=True)
 
     title = models.CharField(max_length=400, default='')
-
-    variables = models.ManyToManyField(Variable, blank=True)
     
     def _get_objects_for_html(self, list_to_append=None, obj=None, exclude_model_names=None):
         list_to_append = super()._get_objects_for_html(list_to_append, obj, exclude_model_names)
@@ -102,6 +100,10 @@ class ApexChart(WidgetContentModel):
     )
 
     type = models.PositiveSmallIntegerField(default=0, choices=type_choices)
+    
+    stacked = models.BooleanField(default=False, help_text="Display stacked data")
+
+    dots = models.BooleanField(default=False, help_text="Enable dots on lines")
 
     def __str__(self):
         return text_type(str(self.id) + ': ' + self.title)
@@ -153,6 +155,7 @@ class ApexChart(WidgetContentModel):
 
 class ApexChartAxis(models.Model):
     label = models.CharField(max_length=400, default='', blank=True)
+    lineOrBar = models.BooleanField(default=False, help_text="Display data as a line or a bar")
     min = models.FloatField(blank=True, null=True)
     max = models.FloatField(blank=True, null=True)
     variables = models.ManyToManyField(Variable)
